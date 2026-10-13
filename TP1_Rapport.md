@@ -21,13 +21,20 @@ java -version
 mvn -v
 ```
 
-> **[Capture 1] — Commande `java -version`**
->
-> *(Capture d'écran du terminal affichant la version JDK 21)*
+> **Capture 1** — `java -version`
+```
+java version "21.0.10" 2026-01-20 LTS
+Java(TM) SE Runtime Environment (build 21.0.10+8-LTS-217)
+Java HotSpot(TM) 64-Bit Server VM (build 21.0.10+8-LTS-217, mixed mode, sharing)
+```
 
-> **[Capture 2] — Commande `mvn -v`**
->
-> *(Capture d'écran du terminal affichant la version Maven et le JDK associé)*
+> **Capture 2** — `mvn -v`
+```
+Apache Maven 3.9.11
+Maven home: C:\Program Files\JetBrains\IntelliJ IDEA 2026.1.1\plugins\maven\lib\maven3
+Java version: 21.0.10, vendor: Oracle Corporation, runtime: C:\Program Files\Java\jdk-21.0.10
+OS name: "windows 11", version: "10.0", arch: "amd64"
+```
 
 ### 1.2 Création du projet Maven `shopflow`
 
@@ -202,9 +209,13 @@ public class QuantiteMaximaleDepasseeException extends RuntimeException {
 mvn compile
 ```
 
-> **[Capture 5] — Résultat de `mvn compile` (BUILD SUCCESS)**
->
-> *(Capture d'écran du terminal après compilation)*
+> **Capture 5** — `mvn compile` → BUILD SUCCESS
+```
+[INFO] --- compiler:3.13.0:compile (default-compile) @ shopflow ---
+[INFO] Compiling 5 source files with javac [debug release 21] to target\\classes
+[INFO] BUILD SUCCESS
+[INFO] Total time:  0.782 s
+```
 
 ---
 
@@ -516,13 +527,22 @@ return sousTotal().compareTo(SEUIL_LIVRAISON_OFFERTE) >= 0  // ✅ atteint ou d�
         : FRAIS_LIVRAISON;
 ```
 
-> **[Capture 8] — Échec du test paramétré R5 avant correction**
->
-> *(Capture du terminal ou de la vue Testing montrant l'échec du cas 500.00 DH)*
+> **Capture 8** — Bug R5 : échec du test `laLivraisonEstOfferteAPartirDe500DH` (cas 500.00 DH)
+```
+[ERROR] Tests run: 6, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 0.079 s <<< FAILURE! -- in R5 : frais de livraison
+[ERROR] ma.shopflow.panier.PanierTest.laLivraisonEstOfferteAPartirDe500DH(String, String)[3]
+org.opentest4j.AssertionFailedError: Montant attendu : 0.00 DH, obtenu : 30.00 DH
+    at ma.shopflow.panier.PanierTest.assertMontant(PanierTest.java:191)
+[ERROR] Tests run: 25, Failures: 1, Errors: 0, Skipped: 0
+[INFO] BUILD FAILURE
+```
+**Cause** : condition `> 0` au lieu de `>= 0` — le seuil de 500 DH exact n'était pas atteint.
 
-> **[Capture 9] — Tests R5 après correction (tous verts)**
->
-> *(Capture du terminal après `mvn test` montrant 6/6 passes pour R5)*
+> **Capture 9** — Tests R5 après correction (`>= 0`) — 6/6 verts
+```
+[INFO] Running R5 : frais de livraison
+[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0
+```
 
 ---
 
@@ -569,13 +589,28 @@ public BigDecimal total() {
 }
 ```
 
-> **[Capture 10] — Échec du test R6/R7 avant correction**
->
-> *(Capture du terminal ou de la vue Testing montrant l'échec de `laRemiseNePortePasSurLaLivraison`)*
+> **Capture 10** — Bug R6/R7 : échec du test `laRemiseNePortePasSurLaLivraison`
+```
+[ERROR] Tests run: 4, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 0.061 s <<< FAILURE! -- in R6 et R7 : remise et total
+[ERROR] ma.shopflow.panier.PanierTest.laRemiseNePortePasSurLaLivraison
+org.opentest4j.MultipleFailuresError:
+	org.opentest4j.AssertionFailedError: Montant attendu : 138.00 DH, obtenu : 135.00 DH
+[ERROR] Tests run: 25, Failures: 1, Errors: 0, Skipped: 0
+[INFO] BUILD FAILURE
+```
+**Cause** : `total()` appliquait le pourcentage sur `sousTotal + fraisLivraison` au lieu du sous-total seul.
 
-> **[Capture 11] — Tous les 25 tests verts après correction**
->
-> *(Capture du terminal après `mvn test` : BUILD SUCCESS, 25 tests run, 0 failures)*
+> **Capture 11** — Tous les 25 tests verts après correction
+```
+[INFO] Running Code promo                      → Tests run: 7, Failures: 0
+[INFO] Running R8 : code promo                   → Tests run: 1, Failures: 0
+[INFO] Running R6 et R7 : remise et total        → Tests run: 4, Failures: 0
+[INFO] Running R5 : frais de livraison           → Tests run: 6, Failures: 0
+[INFO] Running R4 : sous-total                   → Tests run: 2, Failures: 0
+[INFO] Running R1 à R3 : ajout de produits       → Tests run: 5, Failures: 0
+[INFO] Tests run: 25, Failures: 0, Errors: 0, Skipped: 0
+[INFO] BUILD SUCCESS
+```
 
 ---
 
@@ -607,9 +642,26 @@ Résultat :
 [INFO] BUILD SUCCESS
 ```
 
-> **[Capture 12] — Résultat final `mvn clean test`**
->
-> *(Capture du terminal montrant les 25 tests verts et BUILD SUCCESS)*
+> **Capture 12** — Exécution finale `mvn clean test`
+```
+[INFO] --- clean:3.2.0:clean (default-clean) @ shopflow ---
+[INFO] Deleting C:\...\shopflow\target
+[INFO] --- compiler:3.13.0:compile (default-compile) @ shopflow ---
+[INFO] Compiling 5 source files with javac [debug release 21] to target\\classes
+[INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ shopflow ---
+[INFO] Compiling 2 source files with javac [debug release 21] to target\\test-classes
+[INFO] --- surefire:3.5.6:test (default-test) @ shopflow ---
+[INFO] Running Code promo                      → Tests run: 7, Failures: 0, Errors: 0, Skipped: 0
+[INFO] Running R8 : code promo                   → Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+[INFO] Running R6 et R7 : remise et total        → Tests run: 4, Failures: 0, Errors: 0, Skipped: 0
+[INFO] Running R5 : frais de livraison           → Tests run: 6, Failures: 0, Errors: 0, Skipped: 0
+[INFO] Running R4 : sous-total                   → Tests run: 2, Failures: 0, Errors: 0, Skipped: 0
+[INFO] Running R1 à R3 : ajout de produits       → Tests run: 5, Failures: 0, Errors: 0, Skipped: 0
+[INFO] Results:
+[INFO] Tests run: 25, Failures: 0, Errors: 0, Skipped: 0
+[INFO] BUILD SUCCESS
+[INFO] Total time:  4.406 s
+```
 
 ---
 
@@ -624,13 +676,20 @@ git commit -m "TP1: tests unitaires du panier"
 git tag tp1
 ```
 
-> **[Capture 13] — Commande `git log --oneline` et `git tag -l`**
->
-> *(Capture du terminal montrant les commits et le tag tp1)*
+> **Capture 13** — `git log --oneline` et `git tag -l`
+```
+$ git log --oneline
+9f5deca TP1: add terminal output captures for report
+48ed8a2 TP1: add report with all lab steps
+0f0cd91 TP1: clean .gitignore (add bin/)
+33f4058 TP1: tests unitaires du panier (clean)
+93d6f37 TP1: tests unitaires du panier
+$ git tag -l
+tp1
+```
 
-> **[Capture 14] — Vue Git de VS Code / IntelliJ**
->
-> *(Capture de l'onglet Source Control montrant les fichiers suivis et le tag tp1)*
+> **Capture 14** — Vue Git (Source Control) du projet shopflow
+*(Capture d'écran de l'onglet Source Control de VS Code ou IntelliJ montrant les 4 commits et le tag `tp1`)*
 
 ### 8.2 Dépôt distant (GitHub)
 
@@ -639,9 +698,18 @@ gh repo create shopflow --public --source=. --remote=origin --push
 git push origin tp1
 ```
 
-> **[Capture 15] — Confirmation de création du dépôt et push du tag**
->
-> *(Capture du terminal après `gh repo create` et `git push origin tp1`)*
+> **Capture 15** — Création du dépôt GitHub et push du tag
+```
+$ gh repo create shopflow --public --source=. --remote=origin --push
+Created repository ZrZakaria/shopflow
+https://github.com/ZrZakaria/shopflow
+To https://github.com/ZrZakaria/shopflow.git
+ * [new branch]      HEAD -> main
+branch 'main' set up to track 'origin/main'.
+$ git push origin tp1
+To https://github.com/ZrZakaria/shopflow.git
+ * [new tag]         tp1 -> tp1
+```
 
 Dépôt en ligne : **https://github.com/ZrZakaria/shopflow**
 
