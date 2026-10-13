@@ -1,4 +1,4 @@
-D 
+D
 
 # TP1 — Rapport : Tests unitaires avec JUnit 5 — Panier ShopFlow
 
@@ -22,6 +22,7 @@ mvn -v
 ```
 
 > **Capture 1** — `java -version`
+
 ```
 java version "21.0.10" 2026-01-20 LTS
 Java(TM) SE Runtime Environment (build 21.0.10+8-LTS-217)
@@ -29,6 +30,7 @@ Java HotSpot(TM) 64-Bit Server VM (build 21.0.10+8-LTS-217, mixed mode, sharing)
 ```
 
 > **Capture 2** — `mvn -v`
+
 ```
 Apache Maven 3.9.11
 Maven home: C:\Program Files\JetBrains\IntelliJ IDEA 2026.1.1\plugins\maven\lib\maven3
@@ -210,6 +212,7 @@ mvn compile
 ```
 
 > **Capture 5** — `mvn compile` → BUILD SUCCESS
+
 ```
 [INFO] --- compiler:3.13.0:compile (default-compile) @ shopflow ---
 [INFO] Compiling 5 source files with javac [debug release 21] to target\\classes
@@ -528,6 +531,7 @@ return sousTotal().compareTo(SEUIL_LIVRAISON_OFFERTE) >= 0  // ✅ atteint ou d�
 ```
 
 > **Capture 8** — Bug R5 : échec du test `laLivraisonEstOfferteAPartirDe500DH` (cas 500.00 DH)
+
 ```
 [ERROR] Tests run: 6, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 0.079 s <<< FAILURE! -- in R5 : frais de livraison
 [ERROR] ma.shopflow.panier.PanierTest.laLivraisonEstOfferteAPartirDe500DH(String, String)[3]
@@ -536,9 +540,11 @@ org.opentest4j.AssertionFailedError: Montant attendu : 0.00 DH, obtenu : 30.00 D
 [ERROR] Tests run: 25, Failures: 1, Errors: 0, Skipped: 0
 [INFO] BUILD FAILURE
 ```
+
 **Cause** : condition `> 0` au lieu de `>= 0` — le seuil de 500 DH exact n'était pas atteint.
 
 > **Capture 9** — Tests R5 après correction (`>= 0`) — 6/6 verts
+
 ```
 [INFO] Running R5 : frais de livraison
 [INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0
@@ -590,6 +596,7 @@ public BigDecimal total() {
 ```
 
 > **Capture 10** — Bug R6/R7 : échec du test `laRemiseNePortePasSurLaLivraison`
+
 ```
 [ERROR] Tests run: 4, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 0.061 s <<< FAILURE! -- in R6 et R7 : remise et total
 [ERROR] ma.shopflow.panier.PanierTest.laRemiseNePortePasSurLaLivraison
@@ -598,9 +605,11 @@ org.opentest4j.MultipleFailuresError:
 [ERROR] Tests run: 25, Failures: 1, Errors: 0, Skipped: 0
 [INFO] BUILD FAILURE
 ```
+
 **Cause** : `total()` appliquait le pourcentage sur `sousTotal + fraisLivraison` au lieu du sous-total seul.
 
 > **Capture 11** — Tous les 25 tests verts après correction
+
 ```
 [INFO] Running Code promo                      → Tests run: 7, Failures: 0
 [INFO] Running R8 : code promo                   → Tests run: 1, Failures: 0
@@ -643,6 +652,7 @@ Résultat :
 ```
 
 > **Capture 12** — Exécution finale `mvn clean test`
+
 ```
 [INFO] --- clean:3.2.0:clean (default-clean) @ shopflow ---
 [INFO] Deleting C:\...\shopflow\target
@@ -677,6 +687,7 @@ git tag tp1
 ```
 
 > **Capture 13** — `git log --oneline` et `git tag -l`
+
 ```
 $ git log --oneline
 9f5deca TP1: add terminal output captures for report
@@ -689,7 +700,7 @@ tp1
 ```
 
 > **Capture 14** — Vue Git (Source Control) du projet shopflow
-*(Capture d'écran de l'onglet Source Control de VS Code ou IntelliJ montrant les 4 commits et le tag `tp1`)*
+> *(Capture d'écran de l'onglet Source Control de VS Code ou IntelliJ montrant les 4 commits et le tag `tp1`)*
 
 ### 8.2 Dépôt distant (GitHub)
 
@@ -699,6 +710,7 @@ git push origin tp1
 ```
 
 > **Capture 15** — Création du dépôt GitHub et push du tag
+
 ```
 $ gh repo create shopflow --public --source=. --remote=origin --push
 Created repository ZrZakaria/shopflow
