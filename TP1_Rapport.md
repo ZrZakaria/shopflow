@@ -700,7 +700,7 @@ tp1
 ```
 
 > **Capture 14** — Vue Git (Source Control) du projet shopflow
-> *(Capture d'écran de l'onglet Source Control de VS Code ou IntelliJ montrant les 4 commits et le tag `tp1`)*
+![Git Source Control](screenshots/capture14_git.png)
 
 ### 8.2 Dépôt distant (GitHub)
 
