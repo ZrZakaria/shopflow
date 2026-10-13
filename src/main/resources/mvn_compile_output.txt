@@ -1,0 +1,18 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ------------------------< ma.shopflow:shopflow >------------------------
+[INFO] Building ShopFlow 1.0.0-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ shopflow ---
+[INFO] skip non existing resourceDirectory C:\Users\HP\Studies\Studies\S9\GL\shopflow\src\main\resources
+[INFO] 
+[INFO] --- compiler:3.13.0:compile (default-compile) @ shopflow ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  0.782 s
+[INFO] Finished at: 2026-10-13T12:26:54+01:00
+[INFO] ------------------------------------------------------------------------
